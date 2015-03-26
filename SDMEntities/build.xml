@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="CorporateActionsEntities" default="generateDDL" basedir=".">
+
+	<target name="generateDDL">
+		<path id="toolslib">
+			<path location="lib/lynx-framework.jar" />
+			<path location="lib/hibernate-annotations.jar" />
+			<path location="lib/commons-collections-2.1.1.jar" />
+			<path location="lib/commons-logging.jar" />
+			<path location="lib/hibernate-tools.jar" />
+			<path location="lib/hibernate3.jar" />
+			<path location="lib/freemarker-2.3.10.jar" />
+			<path location="lib/ejb3-persistence.jar" />
+			<path location="lib/dom4j-1.6.1.jar" />
+			<path location="lib/ojdbc.jar" />
+			<path location="lib/utilplugins-1.0.0.jar" />
+			<path location="lib/ant.jar" />
+			<path location="lib/xweb-core-4.3.3.jar" />
+			<path location="bin"/>
+		</path>
+
+		<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="toolslib"/>
+
+		<echo>Hibernate Generation</echo>
+		<hibernatetool destdir="scripts">
+			<annotationconfiguration configurationfile="src/hibernate.cfg.xml" />
+			<hbm2ddl export="false" drop="true" create="false" outputfilename="SDM-drop.sql" format="true"/>
+			<hbm2ddl export="false" drop="false" create="true" outputfilename="SDM-create.sql" format="true"/>
+		</hibernatetool>
+	</target>
+	
+	<target name="restoreDB" depends="generateDDL,deleteDB,installDB"/>
+	
+	<target name="restoreInstallDataDB" depends="generateDDL,deleteDB,installDB,installDataDB"/>
+	
+	<target name="deleteDB">
+		<sql driver="oracle.jdbc.driver.OracleDriver" url="jdbc:oracle:thin:@localhost:1521:XE" userid="SDM" password="SDM" autocommit="false" escapeprocessing="true" onerror="continue" showheaders="true" print="true">
+			<classpath>
+				<pathelement location="lib/ojdbc.jar"/>
+			</classpath>
+			<transaction src="scripts/SDM-drop.sql"/>
+		</sql>
+	</target>
+
+	<target name="installDB">
+		<sql driver="oracle.jdbc.driver.OracleDriver" url="jdbc:oracle:thin:@localhost:1521:XE" userid="SDM" password="SDM" autocommit="false" escapeprocessing="true" onerror="abort" showheaders="true" print="true">
+			<classpath>
+				<pathelement location="lib/ojdbc.jar"/>
+			</classpath>
+			<transaction src="scripts/SDM-create.sql" />
+		</sql>
+	</target>
+	
+	<target name="installDataDB">
+			<path id="toolslib">
+				<path location="bin/"/>
+				<path location="lib/hibernate-annotations.jar" />
+				<path location="lib/commons-collections-2.1.1.jar" />
+				<path location="lib/commons-logging.jar" />
+				<path location="lib/commons-lang-2.1.jar" />
+				<path location="lib/hibernate-tools.jar" />
+				<path location="lib/hibernate3.jar" />
+				<path location="lib/freemarker.jar" />
+				<path location="lib/ejb3-persistence.jar" />
+				<path location="lib/dom4j-1.6.1.jar" />
+				<path location="lib/ojdbc.jar" />
+				<path location="lib/utilplugins-1.0.0.jar" />
+				<path location="lib/ant.jar" />
+				<path location="lib/antlr-2.7.6.jar" />
+				<path location="lib/cglib-2.1.3.jar" />
+				<path location="lib/asm.jar" />
+				<path location="lib/jta.jar" />
+				<path location="lib/xweb-core-4.2.1_beta1.jar" />
+				<path location="lib/c3p0-0.9.1.2.jar" />
+				<path location="lib/lynx-framework.jar" />
+			</path> 
+
+			<taskdef name="SDM-create" classname="com.lynxspa.sdm.installer.Install" classpathref="toolslib"/>
+
+			<SDM-create configuration="hibernate.cfg.xml" simulation="false"/>
+		</target>
+</project>
