@@ -5,8 +5,11 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.lynxit.utils.installer.DbDataInstaller;
@@ -17,6 +20,8 @@ import com.lynxspa.entities.application.flow.Transition;
 import com.lynxspa.entities.application.flow.adapters.StatesDictAdapter;
 import com.lynxspa.entities.application.flow.adapters.TransitionsDictAdapter;
 import com.lynxspa.entities.jobs.SDMEnterprise;
+import com.lynxspa.entities.jobs.SDMJobType;
+import com.lynxspa.entities.jobs.SDMJobTypeFields;
 import com.lynxspa.entities.securities.adapters.SecurityDetailAdapter;
 import com.lynxspa.entities.securities.assets.AssetType;
 import com.lynxspa.entities.securities.assets.AssetTypeDetail;
@@ -33,6 +38,8 @@ import com.lynxspa.sdm.dictionaries.enterprises.Enterprises;
 import com.lynxspa.sdm.dictionaries.flows.CAWorkflow;
 import com.lynxspa.sdm.dictionaries.flows.DynamicDataWorkflow;
 import com.lynxspa.sdm.dictionaries.flows.StaticDataWorkflow;
+import com.lynxspa.sdm.dictionaries.jobs.SDMJobTypes;
+import com.lynxspa.sdm.dictionaries.jobs.SDMJobTypesFields;
 import com.lynxspa.sdm.dictionaries.markets.CAMarkets;
 import com.lynxspa.sdm.dictionaries.providers.BasicProviders;
 import com.lynxspa.sdm.dictionaries.securities.securityfinancialassets.CASecurityFinancialAssets;
@@ -86,7 +93,9 @@ public class SDMDataInstaller implements DbDataInstaller{
     	//System.out.println("Installing AssetTypes");
     	installAssetTypes(_session);							// Install Asset Stuff ( new model )
     	//System.out.println("Installing StaticDataProvider");
-    	installStaticDataProvider(_session, "bloomberg", null);	// Install Asset Messages
+    	//Esteban: tablas sin usar:
+    	//installStaticDataProvider(_session, "bloomberg", null);	// Install Asset Messages
+    	installJobTypeAndJobTypeFields(_session);
     	
     	installSecuritiesNormalization(_session);
     	System.out.println("Create Data Finished");
@@ -261,10 +270,15 @@ public class SDMDataInstaller implements DbDataInstaller{
 			assetType = new AssetType(user,assetTypeEnum.getId(),assetTypeEnum.getName());
 			_session.save(assetType);
 			
-			for(AssetTypeDetailAdapter detailToAdd:getAssetTypeDetails(_session,assetType)){
-				System.out.println("Details. Name="+detailToAdd.getName());
-				assetTypeDetail = new AssetTypeDetail(this.user,assetType,detailToAdd);
-		    	_session.save(assetTypeDetail);
+			Query eventQuery= _session.createQuery("from SDMEnterprise as enterprise");
+			List<SDMEnterprise> enterprises = eventQuery.list();
+			for(SDMEnterprise enterprise:enterprises){ 
+				for(AssetTypeDetailAdapter detailToAdd:getAssetTypeDetails(_session,assetType)){
+					System.out.println("Details. Name="+detailToAdd.getName());
+					assetTypeDetail = new AssetTypeDetail(this.user,assetType,detailToAdd);
+					assetTypeDetail.setEnterprise(enterprise);
+			    	_session.save(assetTypeDetail);
+				}
 			}
     	}
     }
@@ -478,4 +492,49 @@ public class SDMDataInstaller implements DbDataInstaller{
 			
 		}
     }
+    
+    @SuppressWarnings("unchecked")
+	private void installJobTypeAndJobTypeFields(Session _session){
+    	
+    	SDMJobType jobType = null;
+    	
+    	for(SDMJobTypes jobTypeInstall : SDMJobTypes.values()){
+    		jobType = new SDMJobType(user);
+    		jobType.setClassExe(jobTypeInstall.getClassExe());
+    		jobType.setCommitDirectory(jobTypeInstall.getCommitDirectory());
+    		jobType.setCommitSuffix(jobTypeInstall.getCommitSuffix());
+    		jobType.setCronExpression(jobTypeInstall.getCronExpression());
+    		jobType.setDescription(jobTypeInstall.getDescription());
+    		jobType.setInputDirectory(jobTypeInstall.getInputDirectory());
+    		jobType.setName(jobTypeInstall.getName());
+    		jobType.setPattern(jobTypeInstall.getPattern());
+    		jobType.setRollbackDirectory(jobTypeInstall.getRollbackDirectory());
+    		jobType.setRollbackSuffix(jobTypeInstall.getRollbackSuffix());
+    		jobType.setTemporalSuffix(jobTypeInstall.getTemporalSuffix());
+    		
+    		_session.save(jobType);
+    		
+    		SDMJobTypeFields jtfBBField = new SDMJobTypeFields();
+    		jtfBBField.setFieldName(SDMJobTypesFields.PROVID_BB.getFieldName());
+    		jtfBBField.setValue(SDMJobTypesFields.PROVID_BB.getValue());
+    		jtfBBField.setJobType(jobType);
+    		_session.save(jtfBBField);
+    		
+    		SDMJobTypeFields jtfBBAssetType = new SDMJobTypeFields();
+    		for(SDMJobTypesFields jtf : SDMJobTypesFields.values()){
+    			System.out.println(jtf.getFieldName() +" - " + jobTypeInstall.getId());
+    			if(jtf.getFieldName().equals(jobTypeInstall.getId())){
+    				jtfBBAssetType.setFieldName(jtf.getFieldName());
+    				jtfBBAssetType.setValue(jtf.getValue());
+    				jtfBBAssetType.setJobType(jobType);
+    				_session.save(jtfBBAssetType);
+    			}
+    		}
+    		
+//    		jobType.setFields(new TreeMap<String, SDMJobTypeFields>());
+//    		jobType.getFields().put(jtfBBField.getValue(), jtfBBField);
+//    		jobType.getFields().put(jtfBBAssetType.getValue(), jtfBBAssetType);
+    	}
+    }
+    
 }

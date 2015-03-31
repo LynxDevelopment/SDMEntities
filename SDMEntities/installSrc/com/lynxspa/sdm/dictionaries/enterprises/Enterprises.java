@@ -4,8 +4,8 @@ import com.lynxspa.entities.jobs.SDMEnterprise;
 
 public enum Enterprises {
 	
-	ENTERPRISE1("Howards","Empresa Mágica","BIC12309","Escocia", "0034986828"),
-	ENTERPRISE2("Mercadona","Mercado na","BIC787628","Valencia","961238767");
+	ENTERPRISE1("BBVA","Banco Bilbao Vizcaya Argentaria","BIC12309","España", "0034986828"),
+	ENTERPRISE2("Banco Santander","Bando de Santander","BIC787628","España","961238767");
 	
 	private String name;
 	private String description;
