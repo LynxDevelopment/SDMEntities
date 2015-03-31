@@ -6,8 +6,8 @@
 		<!-- Database connection settings -->
 		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
 		<property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
-		<property name="hibernate.connection.username">SDM</property>
-		<property name="hibernate.connection.password">SDM</property>
+		<property name="hibernate.connection.username">sdm</property>
+		<property name="hibernate.connection.password">sdm</property>
 		
 		<!-- SQL dialect -->
 		<property name="hibernate.dialect">org.hibernate.dialect.Oracle9Dialect</property>

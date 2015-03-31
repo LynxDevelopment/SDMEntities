@@ -6,8 +6,8 @@
 		<!-- Database connection settings -->
 		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
 		<property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
-		<property name="hibernate.connection.username">SDM</property>
-		<property name="hibernate.connection.password">SDM</property>
+		<property name="hibernate.connection.username">sdm</property>
+		<property name="hibernate.connection.password">sdm</property>
 		
 		<!-- SQL dialect -->
 		<property name="hibernate.dialect">org.hibernate.dialect.Oracle9Dialect</property>
@@ -140,10 +140,17 @@
 		<mapping class="com.lynxspa.entities.securities.assets.AssetType"/>
 		<mapping class="com.lynxspa.entities.securities.assets.AssetTypeDetail"/>
 		<mapping class="com.lynxspa.entities.securities.assets.AssetTypeDetailBlocked"/>
+		
+		<mapping class="com.lynxspa.sdm.entities.statics.configuration.StaticConfig"/>
+		<mapping class="com.lynxspa.sdm.entities.statics.configuration.StaticFieldConfig"/>
+		<mapping class="com.lynxspa.sdm.entities.statics.configuration.StaticFieldMessageConfig"/>
+		<mapping class="com.lynxspa.sdm.entities.statics.configuration.StaticMasterRecordConfig"/>
+		<!--
 		<mapping class="com.lynxspa.entities.securities.assets.configuration.staticdata.StaticConfig"/>
 		<mapping class="com.lynxspa.entities.securities.assets.configuration.staticdata.StaticFieldConfig"/>
 		<mapping class="com.lynxspa.entities.securities.assets.configuration.staticdata.StaticFieldMessageConfig"/>
 		<mapping class="com.lynxspa.entities.securities.assets.configuration.staticdata.StaticMasterRecordConfig"/>
+		-->
 		
 		<!-- Jobs Entities -->
 		<mapping class="com.lynxspa.entities.jobs.SDMEnterprise"/>
@@ -151,6 +158,7 @@
 		<mapping class="com.lynxspa.entities.jobs.SDMJob"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMJobField"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMJobType"/>
+		<mapping class="com.lynxspa.entities.jobs.SDMJobTypeFields"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMRow"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMSecurityRow"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMStatus"/>
