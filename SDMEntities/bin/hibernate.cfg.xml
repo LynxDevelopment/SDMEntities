@@ -4,6 +4,7 @@
 	<session-factory>
 
 		<!-- Database connection settings -->
+		<property name="show_sql">false</property>
 		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
 		<property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
 		<property name="hibernate.connection.username">SDM</property>
@@ -11,12 +12,15 @@
 		
 		<!-- SQL dialect -->
 		<property name="hibernate.dialect">org.hibernate.dialect.Oracle9Dialect</property>
+		
 		<!-- Enable Hibernate's automatic session context management -->
 		<property name="current_session_context_class">thread</property>
-
-		<property name="show_sql">false</property>
+		
+		<!--  cache settings -->
 		<property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<!--  cache settings end -->
+
 
 		<!-- Use the C3P0 connection pool provider -->
 		<property name="hibernate.c3p0.min_size">5</property>
@@ -51,12 +55,10 @@
  		
 		<!-- Securities entities -->
  		<mapping class="com.lynxspa.entities.securities.SPSecurity"/>
- 		
  		<mapping class="com.lynxspa.entities.securities.details.additional.SpSecurityEquity"/>
  		<mapping class="com.lynxspa.entities.securities.details.additional.SpSecurityFund"/>
  		<mapping class="com.lynxspa.entities.securities.details.additional.SpSecurityETF"/>
  		<mapping class="com.lynxspa.entities.securities.details.additional.SpSecurityFixedIncome"/>
- 		
  		<mapping class="com.lynxspa.entities.securities.SPSecurityPortfolio"/>
  		<mapping class="com.lynxspa.entities.securities.SPHistoricSecurityPortfolio"/>  
  		<mapping class="com.lynxspa.entities.securities.markets.SPMarket"/>
@@ -119,7 +121,6 @@
 		<!-- Warnings -->
 		<mapping class="com.lynxspa.sdm.entities.alerts.CAAlertsProvider" />
 		
-		
 		<!-- Static and dynamic modules -->
 		<mapping class="com.lynxspa.entities.securities.assets.messages.AssetMessage"/>
 		<mapping class="com.lynxspa.entities.securities.assets.messages.DynamicAssetMessage"/>
@@ -143,7 +144,7 @@
 		<mapping class="com.lynxspa.entities.securities.assets.AssetTypeDetailBlocked"/>
 
 		
-		<!-- Jobs Entities  -->
+		<!-- Jobs Entities -->
 		<mapping class="com.lynxspa.entities.jobs.SDMEnterprise"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMErrorValue"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMJob"/>
@@ -155,7 +156,7 @@
 		<mapping class="com.lynxspa.entities.jobs.SDMStatus"/>
 		<mapping class="com.lynxspa.entities.jobs.SDMValue"/>
 		
-		<!-- Statics Module  -->
+		<!-- Statics Module -->
 		<mapping class="com.lynxspa.sdm.entities.statics.StaticEvent"/>
 		<mapping class="com.lynxspa.sdm.entities.statics.StaticEventDetails"/>
 		<mapping class="com.lynxspa.sdm.entities.statics.configuration.StaticConfig"/>
