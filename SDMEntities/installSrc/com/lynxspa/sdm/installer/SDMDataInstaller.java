@@ -102,7 +102,6 @@ public class SDMDataInstaller implements DbDataInstaller{
     }
  
     private void installSecuritiesNormalization(Session _session){
-    	SDMAdminNormalization normalization = new SDMAdminNormalization();
     	//TODO Introducir datos de configuracion de la normalizacion de securities
     }
     

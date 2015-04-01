@@ -82,7 +82,7 @@ public class SDMRow implements UpdatableAdapter{
 	}
 	
 	
-	@Column(name="VALUE", length=1000, nullable=true)
+	@Column(name="VALUE", length=2000, nullable=true)
 	public String getValue() {
 		return value;
 	}

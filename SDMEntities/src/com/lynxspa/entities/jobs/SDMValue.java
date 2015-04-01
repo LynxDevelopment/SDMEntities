@@ -66,7 +66,7 @@ public class SDMValue implements UpdatableAdapter{
 		this.version = version;
 	}
 	
-	@Column(name="VALUE", length=100, nullable=true)
+	@Column(name="VALUE", length=200, nullable=true)
 	public String getValue() {
 		return value;
 	}
