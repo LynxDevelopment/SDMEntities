@@ -34,6 +34,7 @@ public class SDMJob implements UpdatableAdapter{
 	private long id = 0l;
 	private int version=0;
 	private String file = null;
+	private String dateFormat = null;
 	private int numRecords = 0;
 	private int numSuccess = 0;
 	private int numFailed = 0;
@@ -69,6 +70,15 @@ public class SDMJob implements UpdatableAdapter{
 	
 	public void setVersion(int version) {
 		this.version = version;
+	}
+	
+	@Column(name="DATE_FORMAT", length=50, nullable=true)
+	public String getDateFormat() {
+		return dateFormat;
+	}
+	
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 	
 	@Column(name="FILE_PATH", length=100, nullable=true)
