@@ -43,7 +43,7 @@ public class StaticEventMessageWrapper {
 		this.session=_session;
 		this.manager=StaticConfigManager.getInstance();
 		this.fieldsMap=new HashMap<String, StaticMessageField>();
-		System.out.println("Num Fields: "+_fields.size());
+//		System.out.println("Num Fields: "+_fields.size());
 		int i=1;
 		for (StaticMessageField messageField:_fields) {
 			try{
